@@ -1,7 +1,5 @@
 # Data-Science-Roadmap
 
-# Data Science Roadmap to Big Tech
-
 ## 🎯 Цель
 Повышения навыков как Data Scientist`a
 
