@@ -12,9 +12,6 @@ ML модель для предсказания цен на недвижимос
 - Обучена на 22,558 реальных объявлениях
 - Оптимизирована с помощью Random Forest
 
-### ML Model Performance
-![R² Score](https://img.shields.io/badge/R²-0.871-brightgreen)
-![MAE](https://img.shields.io/badge/MAE-7.0M_руб-orange)
 ## Использование
 
 ```python
