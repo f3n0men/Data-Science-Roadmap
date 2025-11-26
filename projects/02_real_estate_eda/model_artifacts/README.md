@@ -1,4 +1,3 @@
-readme_content = '''
 #  Moscow Apartment Price Predictor
 
 ML модель для предсказания цен на недвижимость в Москве с точностью 87.1%.
