@@ -1,0 +1,126 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Предсказатель цен на недвижимость</title>
+    <style>
+        body { font-family: Arial, sans-serif; max-width: 600px; margin: 40px auto; padding: 20px; }
+        .form-group { margin: 15px 0; }
+        label { display: block; margin: 5px 0; }
+        input, select { width: 100%; padding: 8px; margin: 5px 0; border: 1px solid #ddd; border-radius: 4px; }
+        button { background: #007cba; color: white; padding: 12px 24px; border: none; border-radius: 4px; cursor: pointer; font-size: 16px; }
+        button:hover { background: #005a87; }
+        button:disabled { background: #ccc; cursor: not-allowed; }
+        .result { margin: 20px 0; padding: 20px; background: #f0f8ff; border-radius: 8px; border-left: 4px solid #007cba; }
+        .error { background: #ffe6e6; border-left-color: #ff4444; }
+        .loading { color: #666; font-style: italic; }
+        .success { color: #2ecc71; font-weight: bold; font-size: 24px; }
+    </style>
+</head>
+<body>
+    <h1>🏠 Предсказатель цен на недвижимость Москвы</h1>
+    <p>ML модель с точностью 87.1% (R² = 0.871)</p>
+
+    <form id="predictionForm">
+        <div class="form-group">
+            <label>Площадь (м²):</label>
+            <input type="number" name="area" value="60" min="10" max="500" required>
+        </div>
+        <div class="form-group">
+            <label>Количество комнат:</label>
+            <input type="number" name="rooms" value="2" min="1" max="10" required>
+        </div>
+        <div class="form-group">
+            <label>Минут до метро:</label>
+            <input type="number" name="minutes_to_metro" value="10" min="0" max="60" required>
+        </div>
+        <div class="form-group">
+            <label>Этаж:</label>
+            <input type="number" name="floor" value="5" min="1" max="50" required>
+        </div>
+        <div class="form-group">
+            <label>Всего этажей в доме:</label>
+            <input type="number" name="total_floors" value="16" min="1" max="100" required>
+        </div>
+        <div class="form-group">
+            <label>Станция метро (опционально):</label>
+            <input type="text" name="metro_station" placeholder="Например: Красногвардейская, Лужники">
+            <small>Оставьте пустым для средней цены по рынку</small>
+        </div>
+        <button type="submit" id="submitBtn">🎯 Предсказать цену</button>
+    </form>
+
+    <div id="result" class="result" style="display:none;">
+        <h3 id="resultTitle"></h3>
+        <p id="resultDetails"></p>
+    </div>
+
+    <script>
+        document.getElementById('predictionForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+
+            const submitBtn = document.getElementById('submitBtn');
+            const resultDiv = document.getElementById('result');
+            const resultTitle = document.getElementById('resultTitle');
+            const resultDetails = document.getElementById('resultDetails');
+
+            // Показываем загрузку
+            submitBtn.disabled = true;
+            submitBtn.textContent = '⏳ Вычисляем...';
+            resultDiv.style.display = 'block';
+            resultDiv.className = 'result';
+            resultTitle.innerHTML = '⏳ Загружаем предсказание...';
+            resultDetails.textContent = '';
+
+            try {
+                const formData = new FormData(this);
+                const data = Object.fromEntries(formData);
+
+                // Отправляем запрос к нашему API
+                const response = await fetch('http://localhost:5000/predict', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(data)
+                });
+
+                const result = await response.json();
+
+                if (result.success) {
+                    const price = result.predicted_price;
+                    resultTitle.innerHTML = `<span class="success">🎯 Предсказанная цена: ${formatPrice(price)}</span>`;
+                    resultDetails.innerHTML = `
+                        <strong>Детали:</strong><br>
+                        • Площадь: ${data.area} м²<br>
+                        • Комнат: ${data.rooms}<br>
+                        • До метро: ${data.minutes_to_metro} мин<br>
+                        • Этаж: ${data.floor} из ${data.total_floors}<br>
+                        ${data.metro_station ? `• Станция метро: ${data.metro_station}` : ''}<br><br>
+                        <em>Точность модели: 87.1% (R² = 0.871)<br>
+                        Средняя ошибка: ±7 млн руб</em>
+                    `;
+                } else {
+                    throw new Error(result.error);
+                }
+
+            } catch (error) {
+                resultDiv.className = 'result error';
+                resultTitle.textContent = 'Ошибка';
+                resultDetails.textContent = `Не удалось получить предсказание: ${error.message}. Убедитесь, что Flask сервер запущен на localhost:5000`;
+            } finally {
+                submitBtn.disabled = false;
+                submitBtn.textContent = '🎯 Предсказать цену';
+            }
+        });
+
+        function formatPrice(price) {
+            if (price >= 1000000) {
+                return (price / 1000000).toLocaleString('ru-RU', {maximumFractionDigits: 1}) + ' млн руб';
+            } else {
+                return price.toLocaleString('ru-RU') + ' руб';
+            }
+        }
+    </script>
+</body>
+</html>
