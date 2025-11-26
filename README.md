@@ -18,9 +18,13 @@
 - Project 3: Advanced ML & Deep Learning
 - Project 4: NLP & LLM Applications
 
-## 🛠 Технологии
-Python, Pandas, ML, Deep Learning, LLM
-
+  
+## 🛠️ Tech Stack
+- **Languages**: Python
+- **ML Libraries**: Scikit-learn, Pandas, NumPy, Matplotlib
+- **Tools**: Git, Jupyter, VS Code
+- **Cloud**: AWS (planned)
+  
 ## 📁 Структура
 - `projects/` - Реальные проекты для портфолио
 - `learning/` - Учебные материалы
