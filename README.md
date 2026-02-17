@@ -1,11 +1,7 @@
-# Data-Science-Roadmap
-
-## Цель
-Повышения навыков как Data Scientist`a
 
 ##  Progress Tracking
 
-### ✅ Completed Projects
+###  Completed Projects
 - **Project 1**: HH.ru Data Science Job Market Analysis
   - Real API integration, data cleaning, market insights
   - Technologies: Python, Pandas, Matplotlib, Requests
@@ -14,18 +10,18 @@
   - EDA, Feature Engineering, ML modeling (R² = 0.871)
   - Technologies: Scikit-learn, Random Forest, Feature Engineering
 
-### 🔄 In Progress
+###  In Progress
 - Project 3: Advanced ML & Deep Learning
 - Project 4: NLP & LLM Applications
 
   
-## 🛠️ Tech Stack
+##  Tech Stack
 - **Languages**: Python
 - **ML Libraries**: Scikit-learn, Pandas, NumPy, Matplotlib
 - **Tools**: Git, Jupyter, VS Code
 - **Cloud**: AWS (planned)
   
-## 📁 Структура
+##  Структура
 - `projects/` - Реальные проекты для портфолио
 - `learning/` - Учебные материалы
 - `resources/` - Датетсеты и ресурсы
